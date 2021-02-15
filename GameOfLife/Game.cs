@@ -80,8 +80,12 @@ namespace GameOfLife
         {
             var fileName = $"{nameof(Board)}__{_startTime.Day}_{_startTime.Month}__{_startTime.Hour}_{_startTime.Minute}__{_gameNumber}.txt";
 
-            await using var createStream = File.Create(fileName);
-            await JsonSerializer.SerializeAsync(createStream, this);
+            await using var createStream = File.Create(fileName); 
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+            };
+            await JsonSerializer.SerializeAsync(createStream, this, options);
 
             return fileName;
         }
