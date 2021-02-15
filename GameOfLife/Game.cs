@@ -23,9 +23,10 @@ namespace GameOfLife
 
         #region Prorperties
 
+        //[JsonConverter(typeof(BoardConverter))]
         public Board Board { get; set; }
        
-        public bool[,] StartBoard { get; }
+        public bool[][] StartBoard { get; }
         
         public int Generation { get; private set; }
 
@@ -40,7 +41,7 @@ namespace GameOfLife
             _columns = columns;
             var grid = GenerateRandomBoard(_rows, _columns, coverage);
             Board = new Board(_rows, _columns, grid);
-            StartBoard = (bool[,])grid.Clone();
+            StartBoard = (bool[][])grid.Clone();
 
             Generation = 1;
             _gameNumber++;
@@ -77,9 +78,9 @@ namespace GameOfLife
 
         public async Task<string> Save()
         {
-            var fileName = $"{nameof(Board)}__{_startTime.Day}_{_startTime.Month}__{_startTime.Hour}_{_startTime.Minute}__{_gameNumber}";
-            
-            using var createStream = File.Create(fileName);
+            var fileName = $"{nameof(Board)}__{_startTime.Day}_{_startTime.Month}__{_startTime.Hour}_{_startTime.Minute}__{_gameNumber}.txt";
+
+            await using var createStream = File.Create(fileName);
             await JsonSerializer.SerializeAsync(createStream, this);
 
             return fileName;
@@ -87,9 +88,12 @@ namespace GameOfLife
 
         public static async Task<Board> Load(string path)
         {
-            using FileStream openStream = File.OpenRead(path);
-            return await JsonSerializer.DeserializeAsync<Board>(openStream);
+            await using FileStream openStream = File.OpenRead(path);
+            var result = await JsonSerializer.DeserializeAsync<Board>(openStream);
+
+            return result;
         }
+
         public void Play(uint maxIterations = 1)
         {
             for (var i = 0; i < maxIterations; i++)
@@ -115,7 +119,7 @@ namespace GameOfLife
 
         private Board CalculateNextGeneration(Board board)
         {
-            var nextGenerationBoard = new Board(_rows, _columns, new bool[_rows, _columns]);
+            var nextGenerationBoard = new Board(_rows, _columns, null); 
 
             // Loop through every cell 
             for (var row = 1; row < _rows - 1; row++)
@@ -169,16 +173,21 @@ namespace GameOfLife
             return nextGenerationBoard;
         }
 
-        private static bool[,] GenerateRandomBoard(uint rows, uint columns, double coverage)
+        private static bool[][] GenerateRandomBoard(uint rows, uint columns, double coverage)
         {
-            var result = new bool[rows, columns];
+            var result = new bool[rows][];
+            for (var i = 0; i < rows; i++)
+            {
+                result[i] = new bool[columns];
+            }
+
             var totalItems = (int)(rows * columns);
             var itemsToAssign = (int)(coverage * totalItems);
 
             var randomIndexes = GenerateRandomInts(itemsToAssign, totalItems);
             foreach (var index in randomIndexes)
             {
-                result[index / rows, index % rows] = true;
+                result[index / rows][index % rows] = true;
             }
 
             return result;

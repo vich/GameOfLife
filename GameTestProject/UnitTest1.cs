@@ -18,13 +18,13 @@ namespace GameTestProject
             _game = new Game(rows, columns, coverage);
         }
 
-        [Test]
-        public async Task SaveAndLoadTest()
-        {
-            var fileName = await _game.Save();
-            var loadedGame = Game.Load(fileName);
-            Assert.Pass();
-        }
+        // [Test]
+        // public async Task SaveAndLoadTest()
+        // {
+        //     var fileName =  await _game.Save();
+        //     var loadedGame = await Game.Load(fileName);
+        //     Assert.AreEqual(_game.Board, loadedGame);
+        // }
 
         [Test]
         public void RunningFullGridTest()

@@ -8,13 +8,12 @@ namespace GameOfLife
         {
             const uint rows = 50;
             const uint columns = 50;
-            const double coverage = 0.25;
+            const double coverage = 0.55;
             const uint maxIterationToPlay = 10000;
 
             var game = new Game(rows, columns, coverage);
-
-            Console.WriteLine($"Generation={game.Generation}, Population={game.Board.Population}");
-
+            game.Play(maxIterationToPlay);
+            
             Console.ReadLine();
         }
 
