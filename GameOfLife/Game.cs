@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -20,15 +19,9 @@ namespace GameOfLife
 
         #region Prorperties
 
-        public uint Rows { get; }
-
-        public uint Columns { get; }
-
-        public double Coverage { get; }
-
         public Board Board { get; set; }
        
-        public Board StartBoard { get; }
+        private Board StartBoard { get; }
         
         public int Generation { get; private set; }
 
@@ -38,14 +31,10 @@ namespace GameOfLife
         #region Constructor
 
         [JsonConstructor]
-        public Game(uint rows, uint columns, double coverage)
+        public Game(Board board)
         {
-            Rows = rows;
-            Columns = columns;
-            Coverage = coverage;
-            var grid = GenerateRandomBoard(Rows, Columns, coverage);
-            Board = new Board(Rows, Columns, grid);
-            StartBoard = new Board(Board);
+            Board = board;
+            StartBoard = new Board(board);
 
             Generation = 1;
             _gameNumber++;
@@ -99,7 +88,7 @@ namespace GameOfLife
             return result;
         }
 
-        public void Play(uint maxIterations = 1)
+        public void Play(int maxIterations = 1)
         {
             for (var i = 0; i < maxIterations; i++)
             {
@@ -124,12 +113,14 @@ namespace GameOfLife
 
         private Board CalculateNextGeneration(Board board)
         {
-            var nextGenerationBoard = new Board(Rows, Columns, null); 
+            var rows = board.Grid.Count;
+            var columns = board.Grid[0].Length;
+            var nextGenerationBoard = BoardFactory.Create(rows, columns, 0);
 
             // Loop through every cell 
-            for (var row = 1; row < Rows - 1; row++)
+            for (var row = 1; row < rows - 1; row++)
             {
-                for (var column = 1; column < Columns - 1; column++)
+                for (var column = 1; column < columns - 1; column++)
                 {
                     // find your alive neighbors
                     var aliveNeighbors = 0;
@@ -176,45 +167,6 @@ namespace GameOfLife
             }
 
             return nextGenerationBoard;
-        }
-
-        private static IDictionary<int, bool[]> GenerateRandomBoard(uint rows, uint columns, double coverage)
-        {
-            var result = new Dictionary<int, bool[]>();
-            for (var i = 0; i < rows; i++)
-            {
-                result.Add(i, new bool[columns]);
-            }
-
-            var totalItems = (int)(rows * columns);
-            var itemsToAssign = (int)(coverage * totalItems);
-
-            var randomIndexes = GenerateRandomInts(itemsToAssign, totalItems);
-            foreach (var index in randomIndexes)
-            {
-                result[(int) (index / rows)][index % rows] = true;
-            }
-
-            return result;
-        }
-
-        private static IEnumerable<int> GenerateRandomInts(int count, int maxValue)
-        {
-            var random = new Random();
-            // generate count random values.
-            var candidates = new HashSet<int>(count);
-            while (candidates.Count < count)
-            {
-                // May strike a duplicate.
-                candidates.Add(random.Next(maxValue));
-            }
-
-            // load them in to a list.
-            var result = new List<int>();
-            result.AddRange(candidates);
-            result.Sort();
-
-            return result;
         }
 
         #endregion

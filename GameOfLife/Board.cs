@@ -8,11 +8,11 @@ namespace GameOfLife
     {
         #region Prorperties
 
-        public uint Rows { get; set; }
+        public int Rows { get; }
         
-        public uint Columns { get; set; }
+        public int Columns { get; }
 
-        public IDictionary<int, bool[]> Grid { get; set; }
+        public IDictionary<int, bool[]> Grid { get; }
         
         public int Population => Grid.SelectMany(rows => rows.Value).Count(cell => cell);
 
@@ -28,7 +28,7 @@ namespace GameOfLife
         #region Constructor
 
         [JsonConstructor]
-        public Board(uint rows, uint columns, IDictionary<int, bool[]> grid )
+        public Board(int rows, int columns, IDictionary<int, bool[]> grid )
         {
             Rows = rows;
             Columns = columns;

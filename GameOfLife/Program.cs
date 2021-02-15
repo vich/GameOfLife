@@ -6,12 +6,13 @@ namespace GameOfLife
     {
         static void Main(string[] args)
         {
-            const uint rows = 50;
-            const uint columns = 50;
+            const int rows = 50;
+            const int columns = 50;
             const double coverage = 0.55;
-            const uint maxIterationToPlay = 10000;
+            const int maxIterationToPlay = 10000;
 
-            var game = new Game(rows, columns, coverage);
+            var board = BoardFactory.Create(rows, columns, coverage);
+            var game = new Game(board);
             game.Play(maxIterationToPlay);
             
             Console.ReadLine();

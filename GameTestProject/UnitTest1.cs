@@ -7,15 +7,16 @@ namespace GameTestProject
     public class Tests
     {
         private Game _game;
-        private const uint rows = 50;
-        private const uint columns = 50;
+        private const int rows = 50;
+        private const int columns = 50;
         private const double coverage = 0.25;
-        private const uint maxIterationToPlay = 10000;
+        private const int maxIterationToPlay = 10000;
 
         [SetUp]
         public void Setup()
         {
-            _game = new Game(rows, columns, coverage);
+            var board = BoardFactory.Create(rows, columns, coverage);
+            _game = new Game(board);
         }
 
         [Test]
@@ -29,7 +30,8 @@ namespace GameTestProject
         [Test]
         public void RunningFullGridTest()
         {
-            _game = new Game(rows, columns, 1);
+            var board = BoardFactory.Create(rows, columns, 1);
+            _game = new Game(board);
             _game.Play(maxIterationToPlay);
             Assert.AreEqual(2, _game.Generation);
         }
@@ -37,7 +39,8 @@ namespace GameTestProject
         [Test]
         public void RunningEmptyGridTest()
         {
-            _game = new Game(rows, columns, 0);
+            var board = BoardFactory.Create(rows, columns, 0);
+            _game = new Game(board);
             _game.Play(maxIterationToPlay);
             Assert.AreEqual(1, _game.Generation);
         }
