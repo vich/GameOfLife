@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -47,7 +48,34 @@ namespace GameOfLife
 
         #region Public Methods
 
-        public void CalculateNextGeneration()
+        public void Play(int iteration = 1)
+        {
+            for (var i = 0; i < iteration; i++)
+            {
+                Console.WriteLine($"Generation={Generation}, Population={Population}");
+                CalculateNextGeneration();
+            }
+        }
+        
+        public async void Save()
+        {
+            var fileName = $"{nameof(Game)}_{GameNumber}";
+
+            using var createStream = File.Create(fileName);
+            await JsonSerializer.SerializeAsync(createStream, this);
+        }
+
+        public async Task<Game> Load(string path)
+        {
+            using FileStream openStream = File.OpenRead(path);
+            return await JsonSerializer.DeserializeAsync<Game>(openStream);
+        }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        private void CalculateNextGeneration()
         {
             Generation++;
             var nextGeneration = new bool[Rows, Columns];
@@ -104,20 +132,6 @@ namespace GameOfLife
             Board = nextGeneration;
         }
 
-        public async void Save()
-        {
-            var fileName = $"{nameof(Game)}_{GameNumber}";
-
-            using var createStream = File.Create(fileName);
-            await JsonSerializer.SerializeAsync(createStream, this);
-        }
-
-        public async Task<Game> Load(string path)
-        {
-            using FileStream openStream = File.OpenRead(path);
-            return await JsonSerializer.DeserializeAsync<Game>(openStream);
-        }
-
-        #endregion Public Methods
+        #endregion Private Methods
     }
 }
