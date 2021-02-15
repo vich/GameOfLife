@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -10,11 +9,13 @@ namespace GameOfLife
 {
     public class Game
     {
-        public uint Rows { get; }
-        public uint Columns { get; }
-        public double Coverage { get; }
-
         #region Members
+
+        public uint Rows { get; }
+        
+        public uint Columns { get; }
+        
+        public double Coverage { get; }
 
         private static int _gameNumber;
 

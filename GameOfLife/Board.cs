@@ -6,10 +6,11 @@ namespace GameOfLife
 {
     public class Board
     {
-        public uint Rows { get; set; }
-        public uint Columns { get; set; }
-
         #region Prorperties
+
+        public uint Rows { get; set; }
+        
+        public uint Columns { get; set; }
 
         public IDictionary<int, bool[]> Grid { get; set; }
         
