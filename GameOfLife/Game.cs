@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace GameOfLife
 {
     public class Game
     {
-        private readonly uint _rows;
-        private readonly uint _columns;
+        public uint Rows { get; }
+        public uint Columns { get; }
+        public double Coverage { get; }
 
         #region Members
 
@@ -26,7 +28,7 @@ namespace GameOfLife
         //[JsonConverter(typeof(BoardConverter))]
         public Board Board { get; set; }
        
-        public bool[][] StartBoard { get; }
+        public Board StartBoard { get; }
         
         public int Generation { get; private set; }
 
@@ -35,13 +37,15 @@ namespace GameOfLife
 
         #region Constructor
 
+        [JsonConstructor]
         public Game(uint rows, uint columns, double coverage)
         {
-            _rows = rows;
-            _columns = columns;
-            var grid = GenerateRandomBoard(_rows, _columns, coverage);
-            Board = new Board(_rows, _columns, grid);
-            StartBoard = (bool[][])grid.Clone();
+            Rows = rows;
+            Columns = columns;
+            Coverage = coverage;
+            var grid = GenerateRandomBoard(Rows, Columns, coverage);
+            Board = new Board(Rows, Columns, grid);
+            StartBoard = new Board(Board);
 
             Generation = 1;
             _gameNumber++;
@@ -56,11 +60,7 @@ namespace GameOfLife
 
         protected bool Equals(Game other)
         {
-            var equalStartBoard = StartBoard.Rank == other.StartBoard.Rank &&
-                                  Enumerable.Range(0, StartBoard.Rank).All(dimension => StartBoard.GetLength(dimension) == other.StartBoard.GetLength(dimension)) &&
-                                  StartBoard.Cast<bool>().SequenceEqual(other.StartBoard.Cast<bool>());
-
-            return equalStartBoard && Equals(Board, other.Board) && Generation == other.Generation;
+            return StartBoard.Equals(other.Board) && Equals(Board, other.Board) && Generation == other.Generation;
         }
 
         public override bool Equals(object obj)
@@ -80,20 +80,21 @@ namespace GameOfLife
         {
             var fileName = $"{nameof(Board)}__{_startTime.Day}_{_startTime.Month}__{_startTime.Hour}_{_startTime.Minute}__{_gameNumber}.txt";
 
-            await using var createStream = File.Create(fileName); 
             var options = new JsonSerializerOptions
             {
                 WriteIndented = true,
             };
+
+            await using var createStream = File.Create(fileName); 
             await JsonSerializer.SerializeAsync(createStream, this, options);
 
             return fileName;
         }
 
-        public static async Task<Board> Load(string path)
+        public static async Task<Game> Load(string path)
         {
             await using FileStream openStream = File.OpenRead(path);
-            var result = await JsonSerializer.DeserializeAsync<Board>(openStream);
+            var result = await JsonSerializer.DeserializeAsync<Game>(openStream);
 
             return result;
         }
@@ -123,12 +124,12 @@ namespace GameOfLife
 
         private Board CalculateNextGeneration(Board board)
         {
-            var nextGenerationBoard = new Board(_rows, _columns, null); 
+            var nextGenerationBoard = new Board(Rows, Columns, null); 
 
             // Loop through every cell 
-            for (var row = 1; row < _rows - 1; row++)
+            for (var row = 1; row < Rows - 1; row++)
             {
-                for (var column = 1; column < _columns - 1; column++)
+                for (var column = 1; column < Columns - 1; column++)
                 {
                     // find your alive neighbors
                     var aliveNeighbors = 0;
@@ -177,12 +178,12 @@ namespace GameOfLife
             return nextGenerationBoard;
         }
 
-        private static bool[][] GenerateRandomBoard(uint rows, uint columns, double coverage)
+        private static IDictionary<int, bool[]> GenerateRandomBoard(uint rows, uint columns, double coverage)
         {
-            var result = new bool[rows][];
+            var result = new Dictionary<int, bool[]>();
             for (var i = 0; i < rows; i++)
             {
-                result[i] = new bool[columns];
+                result.Add(i, new bool[columns]);
             }
 
             var totalItems = (int)(rows * columns);
@@ -191,7 +192,7 @@ namespace GameOfLife
             var randomIndexes = GenerateRandomInts(itemsToAssign, totalItems);
             foreach (var index in randomIndexes)
             {
-                result[index / rows][index % rows] = true;
+                result[(int) (index / rows)][index % rows] = true;
             }
 
             return result;

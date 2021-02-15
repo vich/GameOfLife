@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace GameOfLife
 {
@@ -9,9 +11,9 @@ namespace GameOfLife
 
         #region Prorperties
 
-        public bool[][] Grid { get; set; }
+        public IDictionary<int, bool[]> Grid { get; set; }
         
-        public int Population => Grid.SelectMany(rows => rows).Count(cell => cell);
+        public int Population => Grid.SelectMany(rows => rows.Value).Count(cell => cell);
 
         public bool this[int i, int j]
         {
@@ -24,34 +26,41 @@ namespace GameOfLife
 
         #region Constructor
 
-        public Board(uint rows, uint columns, bool[][] grid )
+        [JsonConstructor]
+        public Board(uint rows, uint columns, IDictionary<int, bool[]> grid )
         {
             Rows = rows;
             Columns = columns;
 
             if (grid != null)
-                Grid = (bool[][]) grid.Clone();
+                Grid = grid.ToDictionary(entry => entry.Key,
+                    entry => entry.Value);
             else
             {
-                Grid = new bool[rows][];
+                Grid = new Dictionary<int, bool[]>();
                 for (var i = 0; i < rows; i++)
                 {
-                    Grid[i] = new bool[columns];
+                    Grid.Add(i, new bool[columns]);
                 }
             }
+        }
+
+        public Board(Board other) : this(other.Rows, other.Columns, other.Grid)
+        {
+            
         }
 
         #endregion Constructor
 
 
         #region Public Methods
-        
+
         protected bool Equals(Board other)
         {
-            if (Grid.Length != other.Grid.Length)
+            if (Grid.Count != other.Grid.Count)
                 return false;
 
-            for (var i = 0; i < Grid.Length; i++)
+            for (var i = 0; i < Grid.Count; i++)
             {
                 if (Grid[i].Length != other.Grid[i].Length)
                     return false;
