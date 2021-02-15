@@ -44,5 +44,18 @@ namespace GameTestProject
             _game.Play(maxIterationToPlay);
             Assert.AreEqual(1, _game.Generation);
         }
+
+
+        [Test]
+        public void CrossoverTest()
+        {
+            var boardA = BoardFactory.Create(rows, columns, 0.4);
+            var boardB = BoardFactory.Create(rows, columns, 0.4);
+
+            var crossover = BoardFactory.Crossover(boardA, boardB, 1);
+
+            Assert.AreEqual(boardA.Grid.Count, crossover.Grid.Count);
+            Assert.AreEqual(boardA.Grid[0].Length, crossover.Grid[0].Length);
+        }
     }
 }
