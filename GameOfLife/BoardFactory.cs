@@ -8,7 +8,7 @@ namespace GameOfLife
     {
         #region Members
 
-        private static readonly Random Random = new Random();
+        private static readonly Random Random = new();
 
         #endregion Members
 

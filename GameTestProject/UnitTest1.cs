@@ -81,7 +81,7 @@ namespace GameTestProject
         {
             //Arrange
             var boardA = BoardFactory.Create(rows, columns, 0.4);
-            var maxMutationRation = 0.1;
+            const double maxMutationRation = 0.1;
 
             //Act
             var crossover = BoardFactory.Mutation(boardA, 1, maxMutationRation);
@@ -94,7 +94,7 @@ namespace GameTestProject
 
         #region Private Methods
 
-        private int CountChanges(Board boardA, Board boardB)
+        private static int CountChanges(Board boardA, Board boardB)
         {
             if (boardA.Columns != boardB.Columns || boardA.Rows != boardB.Rows)
                 throw new System.Exception();
