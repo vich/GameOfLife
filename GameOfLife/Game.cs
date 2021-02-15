@@ -10,13 +10,7 @@ namespace GameOfLife
     public class Game
     {
         #region Members
-
-        public uint Rows { get; }
         
-        public uint Columns { get; }
-        
-        public double Coverage { get; }
-
         private static int _gameNumber;
 
         private static DateTime _startTime = DateTime.MinValue;
@@ -26,7 +20,12 @@ namespace GameOfLife
 
         #region Prorperties
 
-        //[JsonConverter(typeof(BoardConverter))]
+        public uint Rows { get; }
+
+        public uint Columns { get; }
+
+        public double Coverage { get; }
+
         public Board Board { get; set; }
        
         public Board StartBoard { get; }
