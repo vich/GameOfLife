@@ -11,6 +11,8 @@ namespace GameOfLife
         #region Members
 
         private static int _gameNumber;
+
+        private static DateTime _startTime = DateTime.MinValue;
         
         #endregion Members
 
@@ -40,26 +42,20 @@ namespace GameOfLife
             Columns = columns;
             Grid = board ?? new bool[Rows, Columns];
             StartBoard = (bool[,])Grid.Clone();
-
+            
+            Generation = 1;
             _gameNumber++;
+            if (_startTime == DateTime.MinValue)
+                _startTime = DateTime.Now;
         }
 
         #endregion Constructor
 
         #region Public Methods
-
-        public void Play(int iteration = 1)
-        {
-            for (var i = 0; i < iteration; i++)
-            {
-                Console.WriteLine($"Generation={Generation}, Population={Population}");
-                CalculateNextGeneration();
-            }
-        }
         
         public async void Save()
         {
-            var fileName = $"{nameof(Board)}_{GameNumber}";
+            var fileName = $"{nameof(Board)}_{_startTime}_{GameNumber}";
 
             using var createStream = File.Create(fileName);
             await JsonSerializer.SerializeAsync(createStream, this);
@@ -71,11 +67,7 @@ namespace GameOfLife
             return await JsonSerializer.DeserializeAsync<Board>(openStream);
         }
 
-        #endregion Public Methods
-
-        #region Private Methods
-
-        private void CalculateNextGeneration()
+        public bool CalculateNextGeneration()
         {
             Generation++;
             var nextGeneration = new bool[Rows, Columns];
@@ -129,9 +121,39 @@ namespace GameOfLife
                 }
             }
 
+            var result = SameGrid(Grid, nextGeneration);
+
             Grid = nextGeneration;
+
+            return result;
         }
 
-        #endregion Private Methods
+        #endregion Public Methods
+
+        #region Private Grid
+
+        private static bool SameGrid(bool[,] gridA, bool[,] gridB)
+        {
+            var rowsA = gridA.GetLength(0);
+            var columnsA = gridA.GetLength(1);
+            var rowsB = gridB.GetLength(0);
+            var columnsB = gridB.GetLength(1);
+
+            if (rowsA != rowsB || columnsA != columnsB)
+                return false;
+
+            for (var i = 0; i < rowsA; i++)
+            {
+                for (var j = 0; j < columnsB; j++)
+                {
+                    if (gridA[i, j] != gridB[i, j])
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
+        #endregion
     }
 }
