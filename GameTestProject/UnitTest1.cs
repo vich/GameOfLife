@@ -25,5 +25,21 @@ namespace GameTestProject
             var loadedGame = Game.Load(fileName);
             Assert.Pass();
         }
+
+        [Test]
+        public void RunningFullGridTest()
+        {
+            _game = new Game(rows, columns, 1);
+            _game.Play(maxIterationToPlay);
+            Assert.AreEqual(2, _game.Generation);
+        }
+
+        [Test]
+        public void RunningEmptyGridTest()
+        {
+            _game = new Game(rows, columns, 0);
+            _game.Play(maxIterationToPlay);
+            Assert.AreEqual(1, _game.Generation);
+        }
     }
 }

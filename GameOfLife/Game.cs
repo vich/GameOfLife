@@ -90,27 +90,28 @@ namespace GameOfLife
             using FileStream openStream = File.OpenRead(path);
             return await JsonSerializer.DeserializeAsync<Board>(openStream);
         }
-
-        #endregion Public Methods
-
-
-        #region Private Methods
-
-        private void Play(uint maxIterations = 1)
+        public void Play(uint maxIterations = 1)
         {
             for (var i = 0; i < maxIterations; i++)
             {
                 Console.WriteLine($"Generation={Generation}, Population={Board.Population}");
-                Generation++;
                 var nextGenerationBoard = CalculateNextGeneration(Board);
 
                 var equals = Board.Equals(nextGenerationBoard);
                 if (equals)
                     break;
 
+                Generation++;
                 Board = nextGenerationBoard;
             }
         }
+
+
+        #endregion Public Methods
+
+
+        #region Private Methods
+
 
         private Board CalculateNextGeneration(Board board)
         {
