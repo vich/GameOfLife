@@ -10,7 +10,7 @@ namespace GameOfLife
             const uint rows = 50;
             const uint columns = 50;
             var board = GenerateRandomBoard(rows, columns, 1);
-            var game = new Game(rows, columns, board);
+            var game = new Board(rows, columns, board);
             game.Play(10000);
 
             Console.WriteLine($"Generation={game.Generation}, Population={game.Population}");

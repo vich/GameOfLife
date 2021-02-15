@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameOfLife
 {
-    public class Game
+    public class Board
     {
         #region Members
 
@@ -20,13 +20,13 @@ namespace GameOfLife
 
         public uint Columns { get; }
 
-        public bool[,] Board { get; private set; }
+        public bool[,] Grid { get; private set; }
 
         public bool[,] StartBoard { get; }
 
         public int Generation { get; private set; }
 
-        public int Population => Board.Cast<bool>().Count(cell => cell);
+        public int Population => Grid.Cast<bool>().Count(cell => cell);
 
         public int GameNumber => _gameNumber;
 
@@ -34,12 +34,12 @@ namespace GameOfLife
 
         #region Constructor
 
-        public Game(uint rows, uint columns, bool[,] board = null)
+        public Board(uint rows, uint columns, bool[,] board = null)
         {
             Rows = rows;
             Columns = columns;
-            Board = board ?? new bool[Rows, Columns];
-            StartBoard = (bool[,])Board.Clone();
+            Grid = board ?? new bool[Rows, Columns];
+            StartBoard = (bool[,])Grid.Clone();
 
             _gameNumber++;
         }
@@ -59,16 +59,16 @@ namespace GameOfLife
         
         public async void Save()
         {
-            var fileName = $"{nameof(Game)}_{GameNumber}";
+            var fileName = $"{nameof(Board)}_{GameNumber}";
 
             using var createStream = File.Create(fileName);
             await JsonSerializer.SerializeAsync(createStream, this);
         }
 
-        public async Task<Game> Load(string path)
+        public async Task<Board> Load(string path)
         {
             using FileStream openStream = File.OpenRead(path);
-            return await JsonSerializer.DeserializeAsync<Game>(openStream);
+            return await JsonSerializer.DeserializeAsync<Board>(openStream);
         }
 
         #endregion Public Methods
@@ -91,11 +91,11 @@ namespace GameOfLife
                     {
                         for (var j = -1; j <= 1; j++)
                         {
-                            aliveNeighbors += Board[row + i, column + j] ? 1 : 0;
+                            aliveNeighbors += Grid[row + i, column + j] ? 1 : 0;
                         }
                     }
 
-                    var currentCell = Board[row, column];
+                    var currentCell = Grid[row, column];
 
                     // The cell needs to be subtracted 
                     // from its neighbors as it was  
@@ -129,7 +129,7 @@ namespace GameOfLife
                 }
             }
 
-            Board = nextGeneration;
+            Grid = nextGeneration;
         }
 
         #endregion Private Methods
