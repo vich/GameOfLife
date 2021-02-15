@@ -23,6 +23,7 @@ namespace GameOfLife
             var grid = GenerateRandomBoard(rows, columns, coverage);
             return new Board(rows, columns, grid);
         }
+
         public static Board Create(IDictionary<int, bool[]> grid)
         {
             return new Board(grid.Count, grid[0].Length, grid);
@@ -48,9 +49,24 @@ namespace GameOfLife
             return Create(crossoverList);
         }
 
-        public static Board Mutation(Board board, double probability)
+        public static Board Mutation(Board board, double probability, double maxMutationRation = 0.01)
         {
-            throw new NotImplementedException();
+            var rnd = Random.NextDouble();
+            if (probability < rnd)
+                return board;
+            
+            var result = new Board(board);
+
+            var maxCellsToMutation =(int) (board.Columns * board.Rows * maxMutationRation);
+            var mutationNum = Random.Next(maxCellsToMutation);
+            var indexesToMutation = GenerateRandomInts(mutationNum, board.Columns * board.Rows);
+
+            foreach (var index in indexesToMutation)
+            {
+                result.Grid[index / result.Rows][index % result.Rows] = !result.Grid[index / result.Rows][index % result.Rows];
+            }
+
+            return result;
         }
 
         #endregion Public Methods
@@ -72,7 +88,7 @@ namespace GameOfLife
             var randomIndexes = GenerateRandomInts(itemsToAssign, totalItems);
             foreach (var index in randomIndexes)
             {
-                result[(int)(index / rows)][index % rows] = true;
+                result[index / rows][index % rows] = true;
             }
 
             return result;

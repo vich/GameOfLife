@@ -35,7 +35,7 @@ namespace GameOfLife
 
             if (grid != null)
                 Grid = grid.ToDictionary(entry => entry.Key,
-                    entry => entry.Value);
+                    entry => entry.Value.Select(a => a).ToArray());
             else
             {
                 Grid = new Dictionary<int, bool[]>();
@@ -91,10 +91,5 @@ namespace GameOfLife
 
         #endregion Public Methods
 
-
-        #region Private Grid
-
-
-        #endregion
     }
 }
