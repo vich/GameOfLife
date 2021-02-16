@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace GameTestProject
 {
-    public class Tests
+    public class GameTests
     {
         private Game _game;
         private const int rows = 50;
