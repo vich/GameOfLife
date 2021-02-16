@@ -49,7 +49,7 @@ namespace GameOfLife
             return Create(crossoverList);
         }
 
-        public static Board Mutation(Board board, double probability, double maxMutationRation = 0.01)
+        public static Board Mutation(Board board, double probability, double maxMutationRation = 0.001)
         {
             var rnd = Random.NextDouble();
             if (probability < rnd)
@@ -82,7 +82,7 @@ namespace GameOfLife
                 result.Add(i, new bool[columns]);
             }
 
-            var totalItems = (int)(rows * columns);
+            var totalItems = rows * columns;
             var itemsToAssign = (int)(coverage * totalItems);
 
             var randomIndexes = GenerateRandomInts(itemsToAssign, totalItems);
@@ -96,17 +96,7 @@ namespace GameOfLife
 
         private static IEnumerable<int> GenerateRandomInts(int count, int maxValue)
         {
-            // generate count random values.
-            var candidates = new HashSet<int>(count);
-            while (candidates.Count < count)
-            {
-                // May strike a duplicate.
-                candidates.Add(Random.Next(maxValue));
-            }
-
-            // load them in to a list.
-            var result = new List<int>();
-            result.AddRange(candidates);
+            var result = Enumerable.Range(1, maxValue-1).OrderBy(g => Guid.NewGuid()).Take(count).ToList();
             result.Sort();
 
             return result;
