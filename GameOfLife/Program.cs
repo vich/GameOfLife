@@ -14,7 +14,7 @@ namespace GameOfLife
             // var board = BoardFactory.Create(rows, columns, coverage);
             // var game = new Game(board);
 
-            var game = GameFactory.Create(rows, columns, 20);
+            var game = GameFactory.Create(rows, columns, 10, 0.1);
 
             game.Play(maxIterationToPlay);
             

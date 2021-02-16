@@ -4,7 +4,7 @@ namespace GameOfLife
 {
     public static class GameFactory
     {
-        public static Game Create(int rows, int columns, int minGenerationsAlive)
+        public static Game Create(int rows, int columns, int minGenerationsAlive, double maxCoverage = 1)
         {
             Console.WriteLine($"Start Create Game witch alive at minimum {minGenerationsAlive} generations");
             
@@ -12,7 +12,7 @@ namespace GameOfLife
 
             while (true)
             {
-                var coverage = random.NextDouble();
+                var coverage = random.NextDouble() * maxCoverage;
                 var board = BoardFactory.Create(rows, columns, coverage);
                 var game = new Game(board);
                 game.Play(minGenerationsAlive);
