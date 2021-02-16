@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,7 +26,7 @@ namespace GameOfLife
 
         #region Public Methods
 
-        public static Game FindGoodMethoshelach(int chromosomeNum, double mutationProb, double crossoverProb, double keepBestRation = 0.2 )
+        public static Game FindGoodMethoshelach(int chromosomeNum, double mutationProb, double crossoverProb, double keepBestRation = 0.2, int maxIteration = 1000)
         {
             var sw = new Stopwatch();
             sw.Start();
@@ -35,14 +36,22 @@ namespace GameOfLife
             var round = 0;
 
             //init first generation 
-            Parallel.For(0, chromosomeNum, index => _chromosomes.TryAdd(index ,CreateGameAndRun(index)));
-
-            foreach (var chromosome in _chromosomes)
+            var files = Directory.GetFiles(@"C:\Temp\InitData2");
+            for (var index = 0; index < files.Length && index < chromosomeNum; index++)
             {
-                chromosome.Value.Save(@"C:\Temp\Data\25");
+                var jsonPath = files[index];
+                var game = Game.Load(jsonPath);
+                _chromosomes.TryAdd(index, game);
             }
 
-            while (round < 5_000)
+            // Parallel.For(0, chromosomeNum, index => _chromosomes.TryAdd(index ,CreateGameAndRun(index)));
+            //
+            // foreach (var chromosome in _chromosomes)
+            // {
+            //     chromosome.Value.Save(@"C:\Temp\InitData2");
+            // }
+
+            while (round < maxIteration)
             {
                 round++;
 
@@ -110,7 +119,7 @@ namespace GameOfLife
         {
             while(true)
             {
-                var game = GameFactory.Create(Rows, Columns, 25, 0.4);
+                var game = GameFactory.Create(Rows, Columns, 15, 0.4);
                 game.Play(MaxIterationToPlay);
 
                 if(game.Generation < MaxIterationToPlay) //the board didn't stabilize
