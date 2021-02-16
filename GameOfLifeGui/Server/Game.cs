@@ -85,10 +85,10 @@ namespace GameOfLife
             return Equals((Game) obj);
         }
 
-        // public override int GetHashCode()
-        // {
-        //     return HashCode.Combine(Board, StartBoard, Generation);
-        // }
+        public override int GetHashCode()
+        {
+            return StartBoard.GetHashCode();
+        }
 
         public string Save(string path = @"C:\Temp\Data")
         {
