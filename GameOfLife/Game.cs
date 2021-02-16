@@ -51,6 +51,14 @@ namespace GameOfLife
 
         #region Public Methods
 
+        public void Restart()
+        {
+            Generation = 1;
+            Steps.Clear();
+            Steps.Add(StartBoard);
+            Board = new Board(StartBoard);
+        }
+
         protected bool Equals(Game other)
         {
             return StartBoard.Equals(other.Board) && Equals(Board, other.Board) && Generation == other.Generation;
