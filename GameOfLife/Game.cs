@@ -81,10 +81,11 @@ namespace GameOfLife
             return HashCode.Combine(Board, StartBoard, Generation);
         }
 
-        public async Task<string> Save()
+        public async Task<string> Save(string path = @"C:\Temp\Data")
         {
-            var fileName = $"{nameof(Board)}__{_startTime.Day}_{_startTime.Month}__{_startTime.Hour}_{_startTime.Minute}__{_gameNumber}.txt";
-
+            var fileName = Path.Combine(path,
+                $"{nameof(Board)}__{_startTime.Day}_{_startTime.Month}__{_startTime.Hour}_{_startTime.Minute}__{_gameNumber}.txt");
+             
             var options = new JsonSerializerOptions
             {
                 WriteIndented = true,
@@ -108,13 +109,13 @@ namespace GameOfLife
         {
             for (var i = 0; i < maxIterations; i++)
             {
-                Console.WriteLine($"Generation={Generation}, Population={Board.Population}");
+                //Console.WriteLine($"Generation={Generation}, Population={Board.Population}");
                 var nextGenerationBoard = CalculateNextGeneration(Board);
 
                 var repeatIndex = Steps.IndexOf(nextGenerationBoard);
                 if (repeatIndex != -1)
                 {
-                    Console.WriteLine($"The same configuration found in generation {repeatIndex+1}, stop processing");
+                    //Console.WriteLine($"The same configuration found in generation {repeatIndex+1}, stop processing");
                     break;
                 } 
 
