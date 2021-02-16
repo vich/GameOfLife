@@ -25,9 +25,19 @@ namespace GameOfLife
 
         private static Game CreateGameAndRun()
         {
-            var game = GameFactory.Create(Rows, Columns, 10, 0.15);
-            game.Play(MaxIterationToPlay);
-            return game;
+            while(true)
+            {
+                var game = GameFactory.Create(Rows, Columns, 10, 0.15);
+                game.Play(MaxIterationToPlay);
+
+                if(game.Generation < MaxIterationToPlay) //the board didn't stabilize
+                    return game;
+            }
+        }
+
+        private static double Fitness(Game game)
+        {
+            return game.Generation + (game.MaxPopulation / game.StartBoard.Population);
         }
     }
 }

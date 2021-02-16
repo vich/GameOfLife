@@ -22,11 +22,13 @@ namespace GameOfLife
 
         public Board Board { get; set; }
        
-        private Board StartBoard { get; }
+        public Board StartBoard { get; }
         
         public int Generation { get; private set; }
 
         public IList<Board> Steps { get; }
+
+        public int MaxPopulation { get; private set; }
 
         #endregion Prorperties
 
@@ -40,6 +42,7 @@ namespace GameOfLife
             StartBoard = new Board(board);
             Steps = new List<Board>{StartBoard};
 
+            MaxPopulation = Board.Population;
             Generation = 1;
             _gameNumber++;
             if (_startTime == DateTime.MinValue)
@@ -57,6 +60,7 @@ namespace GameOfLife
             Steps.Clear();
             Steps.Add(StartBoard);
             Board = new Board(StartBoard);
+            MaxPopulation = Board.Population;
         }
 
         protected bool Equals(Game other)
@@ -116,6 +120,7 @@ namespace GameOfLife
 
                 Generation++;
                 Board = nextGenerationBoard;
+                MaxPopulation = Math.Max(MaxPopulation, Board.Population);
                 Steps.Add(Board);
             }
         }
