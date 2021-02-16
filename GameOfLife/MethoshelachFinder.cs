@@ -1,5 +1,7 @@
-﻿using System;
+﻿using BenchmarkDotNet.Attributes;
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GameOfLife
 {
-    public static class MethoshelachFinder
+    public class MethoshelachFinder
     {
         #region Members
 
@@ -22,14 +24,15 @@ namespace GameOfLife
 
 
         #endregion Members
-        
+
 
         #region Public Methods
-
-        public static Game FindGoodMethoshelach(int chromosomeNum, double mutationProb, double crossoverProb, double keepBestRation = 0.2, int maxIteration = 1000)
+        
+        public (Game, IList<Coords>) FindGoodMethoshelach(int chromosomeNum, double mutationProb, double crossoverProb, double keepBestRation = 0.2, int maxIteration = 1000)
         {
             var sw = new Stopwatch();
             sw.Start();
+            var coordinats = new List<Coords>();
 
             _chromosomes = new ConcurrentDictionary<int, Game>();
             var bestChromosomeNum = (int)(chromosomeNum * keepBestRation);
@@ -60,6 +63,7 @@ namespace GameOfLife
                 var bestGames = games.Take(bestChromosomeNum).ToList();
                 var bestFitness = Fitness(bestGames.First());
                 Console.WriteLine($"best fitness={bestFitness} for round {round}");
+                coordinats.Add(new Coords(round, bestFitness));
 
                 if (bestFitness > 1000)
                     break;
@@ -89,7 +93,7 @@ namespace GameOfLife
             }
 
             //return the best game
-            return _chromosomes.Values.OrderBy(Fitness).Last();
+            return (_chromosomes.Values.OrderBy(Fitness).Last(), coordinats);
         }
 
 
@@ -98,7 +102,7 @@ namespace GameOfLife
 
         #region Private Methods
 
-        private static Game CreateDescendants(int bestChromosomeNum, double crossoverProb)
+        private Game CreateDescendants(int bestChromosomeNum, double crossoverProb)
         {
             while (true)
             {
@@ -115,7 +119,7 @@ namespace GameOfLife
             }
         }
 
-        private static Game CreateGameAndRun(int index)
+        private Game CreateGameAndRun(int index)
         {
             while(true)
             {
@@ -135,7 +139,7 @@ namespace GameOfLife
             }
         }
 
-        private static double Fitness(Game game)
+        private double Fitness(Game game)
         {
             if (game.StartBoard.Population > 0)
                 return game.Generation + (game.MaxPopulation / game.StartBoard.Population);
