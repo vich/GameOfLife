@@ -25,7 +25,7 @@ namespace GameOfLife
 
         #region Public Methods
 
-        public static async Task<Game> FindGoodMethoshelach(int chromosomeNum, double mutationProb, double crossoverProb, double keepBestRation = 0.2 )
+        public static Game FindGoodMethoshelach(int chromosomeNum, double mutationProb, double crossoverProb, double keepBestRation = 0.2 )
         {
             var sw = new Stopwatch();
             sw.Start();
@@ -39,7 +39,7 @@ namespace GameOfLife
 
             foreach (var chromosome in _chromosomes)
             {
-                await chromosome.Value.Save(@"C:\Temp\Data\20");
+                chromosome.Value.Save(@"C:\Temp\Data\25");
             }
 
             while (round < 5_000)
@@ -76,7 +76,7 @@ namespace GameOfLife
             sw.Stop();
             foreach (var game in _chromosomes.TakeLast(10))
             {
-                await game.Value.Save();
+                game.Value.Save();
             }
 
             //return the best game
@@ -110,13 +110,18 @@ namespace GameOfLife
         {
             while(true)
             {
-                var game = GameFactory.Create(Rows, Columns, 20, 0.15);
+                var game = GameFactory.Create(Rows, Columns, 25, 0.4);
                 game.Play(MaxIterationToPlay);
 
                 if(game.Generation < MaxIterationToPlay) //the board didn't stabilize
                 {
                     Console.WriteLine($"Create game {index}");
                     return game;
+                }
+                else
+                {
+                    Console.WriteLine($"Game run for to much generations, saved to files");
+                    game.Save(@"C:\Temp\Data\Check");
                 }
             }
         }

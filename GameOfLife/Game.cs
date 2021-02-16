@@ -81,26 +81,26 @@ namespace GameOfLife
             return HashCode.Combine(Board, StartBoard, Generation);
         }
 
-        public async Task<string> Save(string path = @"C:\Temp\Data")
+        public string Save(string path = @"C:\Temp\Data")
         {
             var fileName = Path.Combine(path,
                 $"{nameof(Board)}__{_startTime.Day}_{_startTime.Month}__{_startTime.Hour}_{_startTime.Minute}__{_gameNumber}.txt");
              
             var options = new JsonSerializerOptions
             {
-                WriteIndented = true,
+                WriteIndented = true
             };
 
-            await using var createStream = File.Create(fileName); 
-            await JsonSerializer.SerializeAsync(createStream, this, options);
+            var json = JsonSerializer.Serialize(this, options);
+            File.WriteAllText(fileName, json);
 
             return fileName;
         }
 
-        public static async Task<Game> Load(string path)
+        public static Game Load(string path)
         {
-            await using FileStream openStream = File.OpenRead(path);
-            var result = await JsonSerializer.DeserializeAsync<Game>(openStream);
+            var jsonString = File.ReadAllText(path);
+            var result = JsonSerializer.Deserialize<Game>(jsonString);
 
             return result;
         }

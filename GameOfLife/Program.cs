@@ -5,7 +5,7 @@ namespace GameOfLife
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             const int rows = 50;
             const int columns = 50;
@@ -15,7 +15,7 @@ namespace GameOfLife
             // var board = BoardFactory.Create(rows, columns, coverage);
             // var game = new Game(board);
 
-            var game = await MethoshelachFinder.FindGoodMethoshelach(50, 0.40, 0.7);
+            var game = MethoshelachFinder.FindGoodMethoshelach(50, 0.40, 0.7);
 
             // var game = GameFactory.Create(rows, columns, 10, 0.1);
             //

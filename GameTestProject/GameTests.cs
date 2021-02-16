@@ -20,13 +20,13 @@ namespace GameTestProject
         }
 
         [Test]
-        public async Task SaveAndLoadTest()
+        public void SaveAndLoadTest()
         {
             //Arrange
 
             //Act
-            var fileName =  await _game.Save();
-            var loadedGame = await Game.Load(fileName);
+            var fileName =  _game.Save();
+            var loadedGame = Game.Load(fileName);
 
             //Assert
             Assert.AreEqual(_game, loadedGame);
