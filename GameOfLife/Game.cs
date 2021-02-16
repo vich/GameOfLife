@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace GameOfLife
 {
@@ -11,8 +10,6 @@ namespace GameOfLife
     {
         #region Members
         
-        private static int _gameNumber;
-
         private static DateTime _startTime = DateTime.MinValue;
 
         #endregion Members
@@ -44,7 +41,7 @@ namespace GameOfLife
 
             MaxPopulation = Board.Population;
             Generation = 1;
-            _gameNumber++;
+
             if (_startTime == DateTime.MinValue)
                 _startTime = DateTime.Now;
         }
@@ -84,7 +81,7 @@ namespace GameOfLife
         public string Save(string path = @"C:\Temp\Data")
         {
             var fileName = Path.Combine(path,
-                $"{nameof(Board)}__{_startTime.Day}_{_startTime.Month}__{_startTime.Hour}_{_startTime.Minute}__{_gameNumber}.txt");
+                $"{nameof(Board)}__{DateTime.Now.Ticks}.txt");
              
             var options = new JsonSerializerOptions
             {
