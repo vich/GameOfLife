@@ -32,7 +32,6 @@ namespace GameOfLife
 
         #region Constructor
 
-        [JsonConstructor]
         public Game(Board board)
         {
             Board = board;
@@ -41,6 +40,20 @@ namespace GameOfLife
 
             MaxPopulation = Board.Population;
             Generation = 1;
+
+            if (_startTime == DateTime.MinValue)
+                _startTime = DateTime.Now;
+        }
+
+        [JsonConstructor]
+        public Game(Board board, Board startBoard, int generation, IList<Board> steps, int maxPopulation)
+        {
+            Board = board;
+            StartBoard = startBoard;
+            Steps = steps;
+
+            MaxPopulation = maxPopulation;
+            Generation = generation;
 
             if (_startTime == DateTime.MinValue)
                 _startTime = DateTime.Now;
