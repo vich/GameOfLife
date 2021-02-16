@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -25,6 +26,8 @@ namespace GameOfLife
         
         public int Generation { get; private set; }
 
+        public IList<Board> Steps { get; }
+
         #endregion Prorperties
 
 
@@ -35,6 +38,7 @@ namespace GameOfLife
         {
             Board = board;
             StartBoard = new Board(board);
+            Steps = new List<Board>{StartBoard};
 
             Generation = 1;
             _gameNumber++;
@@ -95,15 +99,18 @@ namespace GameOfLife
                 Console.WriteLine($"Generation={Generation}, Population={Board.Population}");
                 var nextGenerationBoard = CalculateNextGeneration(Board);
 
-                var equals = Board.Equals(nextGenerationBoard);
-                if (equals)
+                var repeatIndex = Steps.IndexOf(nextGenerationBoard);
+                if (repeatIndex != -1)
+                {
+                    Console.WriteLine($"The same configuration found in generation {repeatIndex+1}, stop processing");
                     break;
+                } 
 
                 Generation++;
                 Board = nextGenerationBoard;
+                Steps.Add(Board);
             }
         }
-
 
         #endregion Public Methods
 
@@ -111,7 +118,7 @@ namespace GameOfLife
         #region Private Methods
 
 
-        private Board CalculateNextGeneration(Board board)
+        private static Board CalculateNextGeneration(Board board)
         {
             var rows = board.Grid.Count;
             var columns = board.Grid[0].Length;
