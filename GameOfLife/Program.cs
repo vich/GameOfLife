@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace GameOfLife
 {
@@ -14,10 +15,12 @@ namespace GameOfLife
             // var board = BoardFactory.Create(rows, columns, coverage);
             // var game = new Game(board);
 
-            var game = GameFactory.Create(rows, columns, 10, 0.1);
+            var game = MethoshelachFinder.FindGoodMethoshelach(10, 0.1, 0.1);
 
-            game.Play(maxIterationToPlay);
-            
+            // var game = GameFactory.Create(rows, columns, 10, 0.1);
+            //
+            // game.Play(maxIterationToPlay);
+
             Console.ReadLine();
         }
 
