@@ -177,12 +177,12 @@ namespace GameOfLifeConsole
             //Score = 6439
 
 
-            var game13 = FindNumberphile(20, 1, 0.5, 0.2, 2000);
+            var game13 = FindNumberphile(20, 1, 0.5);
 
             Console.ReadLine();
         }
 
-        private static (Game, IList<Coords>) FindNumberphile(int chromosomeNum, double mutationProb, double crossoverProb, double keepBestRation = 0.2,double newGenerationRation=0.1, int maxIteration = 1000)
+        private static (Game, IList<Coords>) FindNumberphile(int chromosomeNum, double mutationProb, double crossoverProb, double keepBestRation = 0.2,double newGenerationRation=0.2, int maxIteration = 1000)
         {
             var sw = new Stopwatch();
             sw.Start();
