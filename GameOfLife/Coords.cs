@@ -1,6 +1,6 @@
 ﻿namespace GameOfLife
 {
-    public struct Coords
+    public readonly struct Coords
     { 
         public Coords(double x, double y)
         {

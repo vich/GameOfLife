@@ -1,9 +1,7 @@
-﻿using BenchmarkDotNet.Attributes;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,7 +13,6 @@ namespace GameOfLife
 
         private const int Rows = 50;
         private const int Columns = 50;
-        private const double Coverage = 0.15;
         private const int MaxIterationToPlay = 10000;
         private static ConcurrentDictionary<int,Game> _chromosomes;
 
@@ -39,20 +36,20 @@ namespace GameOfLife
             var round = 0;
 
             //init first generation 
-            var files = Directory.GetFiles(@"C:\Temp\InitData2");
-            for (var index = 0; index < files.Length && index < chromosomeNum; index++)
-            {
-                var jsonPath = files[index];
-                var game = Game.Load(jsonPath);
-                _chromosomes.TryAdd(index, game);
-            }
-
-            // Parallel.For(0, chromosomeNum, index => _chromosomes.TryAdd(index ,CreateGameAndRun(index)));
-            //
-            // foreach (var chromosome in _chromosomes)
+            // var files = Directory.GetFiles(@"C:\Temp\InitData2");
+            // for (var index = 0; index < files.Length && index < chromosomeNum; index++)
             // {
-            //     chromosome.Value.Save(@"C:\Temp\InitData2");
+            //     var jsonPath = files[index];
+            //     var game = Game.Load(jsonPath);
+            //     _chromosomes.TryAdd(index, game);
             // }
+
+            Parallel.For(0, chromosomeNum, index => _chromosomes.TryAdd(index ,CreateGameAndRun(index)));
+            
+            foreach (var chromosome in _chromosomes)
+            {
+                chromosome.Value.Save(@"C:\Temp\InitData2");
+            }
 
             while (round < maxIteration)
             {
@@ -130,7 +127,7 @@ namespace GameOfLife
         {
             while(true)
             {
-                var game = GameFactory.Create(Rows, Columns, 15, 0.4);
+                var game = GameFactory.Create(Rows, Columns, 10, 0.4);
                 game.Play(MaxIterationToPlay);
 
                 if(game.Generation < MaxIterationToPlay) //the board didn't stabilize

@@ -9,14 +9,6 @@ namespace GameOfLifeConsole
     {
         static void Main(string[] args)
         {
-            const int rows = 50;
-            const int columns = 50;
-            const double coverage = 0.55;
-            const int maxIterationToPlay = 10000;
-
-            // var board = BoardFactory.Create(rows, columns, coverage);
-            // var game = new Game(board);
-            NumberphileFinder numberphileFinder = new NumberphileFinder();
             var sw = new Stopwatch();
             sw.Start();
 
@@ -184,13 +176,6 @@ namespace GameOfLifeConsole
             //var game14 = FindNumberphile(20, 1, 0.5, 0.2, 1000);
             //Score = 6439
 
-
-            // var game = GameFactory.Create(rows, columns, 10, 0.1);
-            //
-            // game.Play(maxIterationToPlay);
-
-            //var summary = BenchmarkRunner.Run<NumberphileFinder>();
-
             Console.ReadLine();
         }
 
@@ -199,12 +184,12 @@ namespace GameOfLifeConsole
             var sw = new Stopwatch();
             sw.Start();
 
-            var NumberphileFinder = new NumberphileFinder();
-            var game = NumberphileFinder.FindNumberphile(chromosomeNum, mutationProb, crossoverProb, keepBestRation, maxIteration);
+            var numberphileFinder = new NumberphileFinder();
+            var game = numberphileFinder.FindNumberphile(chromosomeNum, mutationProb, crossoverProb, keepBestRation, maxIteration);
             sw.Stop();
             var time = sw.Elapsed;
             //Console.WriteLine($"stopwatch={time}");
-            Debug.WriteLine($"chromosomeNum={chromosomeNum}, Fitness={NumberphileFinder.Fitness(game.Item1)}, time={time}");
+            Debug.WriteLine($"chromosomeNum={chromosomeNum}, Fitness={numberphileFinder.Fitness(game.Item1)}, time={time}");
             return game;
         }
     }
