@@ -49,7 +49,7 @@ namespace GameOfLife
             return Create(crossoverList);
         }
 
-        public static Board Mutation(Board board, double probability, double maxMutationRation = 0.001)
+        public static Board Mutation(Board board, double probability, double maxMutationRation = 0.5)
         {
             var rnd = Random.NextDouble();
             if (probability < rnd)

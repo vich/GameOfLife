@@ -64,9 +64,9 @@ namespace GameOfLife
                 var bestFitness = Fitness(bestGames.First());
                 Console.WriteLine($"best fitness={bestFitness} for round {round}");
                 coordinats.Add(new Coords(round, bestFitness));
-
-                if (bestFitness > 1000)
-                    break;
+                
+                // if (bestFitness >= 10_000)
+                //     break;
 
                 _chromosomes.Clear();
                 for (var i = 0; i < bestChromosomeNum; i++)
@@ -96,6 +96,13 @@ namespace GameOfLife
             return (_chromosomes.Values.OrderBy(Fitness).Last(), coordinats);
         }
 
+        public double Fitness(Game game)
+        {
+            if (game.StartBoard.Population > 0)
+                return game.Generation + (game.MaxPopulation / game.StartBoard.Population);
+            else
+                return game.Generation;
+        }
 
         #endregion Public Methods
 
@@ -139,13 +146,6 @@ namespace GameOfLife
             }
         }
 
-        private double Fitness(Game game)
-        {
-            if (game.StartBoard.Population > 0)
-                return game.Generation + (game.MaxPopulation / game.StartBoard.Population);
-            else
-                return game.Generation;
-        }
 
         #endregion Private Methods
     }
