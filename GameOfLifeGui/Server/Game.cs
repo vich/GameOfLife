@@ -48,11 +48,11 @@ namespace GameOfLife
         }
 
         [JsonConstructor]
-        public Game(Board board, Board startBoard, int generation, IList<Board> steps, int maxPopulation)
+        public Game(Board board, Board startBoard, int generation, int maxPopulation)
         {
             Board = board;
             StartBoard = startBoard;
-            Steps = steps;
+            Steps = new List<Board> { StartBoard };
 
             MaxPopulation = maxPopulation;
             Generation = generation;
@@ -125,13 +125,21 @@ namespace GameOfLife
                     Debug.WriteLine($"Numberphile!!, The same configuration found in generation {repeatIndex + 1}, stop processing");
                     IsNumberphile = true;
                     break;
-                } 
+                }
 
                 Generation++;
                 Board = nextGenerationBoard;
                 MaxPopulation = Math.Max(MaxPopulation, Board.Population);
                 Steps.Add(Board);
             }
+        }
+
+        public double Fitness()
+        {
+            if (StartBoard.Population > 0)
+                return MaxPopulation / (double)StartBoard.Population;
+            else
+                return 0;
         }
 
         #endregion Public Methods

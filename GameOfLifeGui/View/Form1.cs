@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GameOfLife;
+using Newtonsoft.Json;
 
 namespace GameOfLifeGui
 {
@@ -38,10 +40,10 @@ namespace GameOfLifeGui
             var sw = new Stopwatch();
             sw.Start();
             var results = await Task.Run(() => _numberphileFinder.FindNumberphile(chromosomeNum, mutationProb, crossoverProb, keepBestRation, maxIteration));
-            AddChart(results.Item2, name, color, sw.Elapsed);
+            AddChart(results.Item2, name, color);
         }
 
-        private void AddChart(IEnumerable<Coords> results, string name, Color color, TimeSpan swElapsed)
+        private void AddChart(IEnumerable<Coords> results, string name, Color color)
         {
             chart1.Series.Add(name);
             chart1.Series[name].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -64,6 +66,30 @@ namespace GameOfLifeGui
             {
                 btnColor.BackColor = colorDialog1.Color;
             }
+        }
+
+        private async void btnAddFromFile_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    upperPnl.Enabled = false;
+                    var filePath = openFileDialog1.FileName;
+                    var coordinates = new List<Coords>();
+                    await Task.Run(() =>
+                    {
+                        var jsonString = File.ReadAllText(filePath);
+                        coordinates = JsonConvert.DeserializeObject<List<Coords>>(jsonString);
+                    });
+                    AddChart(coordinates, filePath, btnColor.BackColor);
+                }
+                finally
+                {
+                    upperPnl.Enabled = true;
+                }
+            }
+
         }
     }
 }

@@ -29,9 +29,9 @@ namespace GameOfLifeGui
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.button1 = new System.Windows.Forms.Button();
             this.chromosomeNum = new System.Windows.Forms.NumericUpDown();
@@ -50,6 +50,8 @@ namespace GameOfLifeGui
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.upperPnl = new System.Windows.Forms.Panel();
+            this.btnAddFromFile = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chromosomeNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMutation)).BeginInit();
@@ -61,16 +63,16 @@ namespace GameOfLifeGui
             // 
             // chart1
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
+            chartArea3.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.chart1.Legends.Add(legend3);
             this.chart1.Location = new System.Drawing.Point(12, 263);
             this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chart1.Series.Add(series1);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.chart1.Series.Add(series3);
             this.chart1.Size = new System.Drawing.Size(1805, 890);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
@@ -117,12 +119,13 @@ namespace GameOfLifeGui
             // 
             // btnColor
             // 
+            this.btnColor.BackColor = System.Drawing.SystemColors.Highlight;
             this.btnColor.Location = new System.Drawing.Point(98, 60);
             this.btnColor.Name = "btnColor";
             this.btnColor.Size = new System.Drawing.Size(82, 44);
             this.btnColor.TabIndex = 5;
             this.btnColor.Text = "Color";
-            this.btnColor.UseVisualStyleBackColor = true;
+            this.btnColor.UseVisualStyleBackColor = false;
             this.btnColor.Click += new System.EventHandler(this.btnColor_Click);
             // 
             // tbName
@@ -275,6 +278,7 @@ namespace GameOfLifeGui
             // 
             // upperPnl
             // 
+            this.upperPnl.Controls.Add(this.btnAddFromFile);
             this.upperPnl.Controls.Add(this.label7);
             this.upperPnl.Controls.Add(this.label6);
             this.upperPnl.Controls.Add(this.label5);
@@ -294,6 +298,20 @@ namespace GameOfLifeGui
             this.upperPnl.Name = "upperPnl";
             this.upperPnl.Size = new System.Drawing.Size(1242, 233);
             this.upperPnl.TabIndex = 16;
+            // 
+            // btnAddFromFile
+            // 
+            this.btnAddFromFile.Location = new System.Drawing.Point(1042, 107);
+            this.btnAddFromFile.Name = "btnAddFromFile";
+            this.btnAddFromFile.Size = new System.Drawing.Size(146, 61);
+            this.btnAddFromFile.TabIndex = 17;
+            this.btnAddFromFile.Text = "Add from file";
+            this.btnAddFromFile.UseVisualStyleBackColor = true;
+            this.btnAddFromFile.Click += new System.EventHandler(this.btnAddFromFile_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // Form1
             // 
@@ -337,6 +355,8 @@ namespace GameOfLifeGui
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Panel upperPnl;
+        private System.Windows.Forms.Button btnAddFromFile;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace GameOfLife
 {
@@ -14,13 +15,10 @@ namespace GameOfLife
 
         private const int Rows = 50;
         private const int Columns = 50;
-        private const double Coverage = 0.15;
         private const int MaxIterationToPlay = 10000;
         private static ConcurrentDictionary<int,Game> _chromosomes;
 
         private static Random Random { get; } = new Random();
-
-
 
         #endregion Members
 
@@ -38,20 +36,20 @@ namespace GameOfLife
             var round = 0;
 
             //init first generation 
-            var files = Directory.GetFiles(@"C:\Temp\InitData2");
-            for (var index = 0; index < files.Length && index < chromosomeNum; index++)
-            {
-                var jsonPath = files[index];
-                var game = Game.Load(jsonPath);
-                _chromosomes.TryAdd(index, game);
-            }
-
-            // Parallel.For(0, chromosomeNum, index => _chromosomes.TryAdd(index ,CreateGameAndRun(index)));
-            //
-            // foreach (var chromosome in _chromosomes)
+            // var files = Directory.GetFiles(@"C:\Temp\InitData2");
+            // for (var index = 0; index < files.Length && index < chromosomeNum; index++)
             // {
-            //     chromosome.Value.Save(@"C:\Temp\InitData2");
+            //     var jsonPath = files[index];
+            //     var game = Game.Load(jsonPath);
+            //     _chromosomes.TryAdd(index, game);
             // }
+
+            Parallel.For(0, chromosomeNum, index => _chromosomes.TryAdd(index ,CreateGameAndRun(index)));
+            
+            foreach (var chromosome in _chromosomes)
+            {
+                chromosome.Value.Save(@"C:\Temp\InitData2");
+            }
 			
             double previousFitness = 1;
             const int period = 100;
@@ -62,9 +60,9 @@ namespace GameOfLife
                 round++;
 
                 //Rank Selection
-                var games = _chromosomes.Values.OrderBy(game=>game.IsNumberphile).ThenBy(Fitness).Reverse();
+                var games = _chromosomes.Values.OrderBy(game=>game.IsNumberphile).ThenBy(game => game.Fitness()).Reverse();
                 var bestGames = games.Take(bestChromosomeNum).ToList();
-                var bestFitness = Fitness(bestGames.First());
+                var bestFitness = bestGames.First().Fitness();
                 Console.WriteLine($"best fitness={bestFitness} for round {round}");
                 coordinates.Add(new Coords(round, bestFitness));
                 movingAverage.Push(bestFitness / previousFitness);
@@ -97,15 +95,23 @@ namespace GameOfLife
                 game.Value.Save();
             }
 
+            SaveCoordinates(coordinates);
             //return the best game
-            return (_chromosomes.Values.OrderBy(Fitness).Last(), coordinates);
+            return (_chromosomes.Values.OrderBy(game=> game.Fitness()).Last(), coordinates);
         }
-
 
         #endregion Public Methods
 
 
         #region Private Methods
+
+        private void SaveCoordinates(IList<Coords> coordinates)
+        {
+            var fileName = $"Coordinates_{nameof(Board)}__{DateTime.Now.Ticks}.txt";
+
+            var json = JsonConvert.SerializeObject(coordinates);
+            File.WriteAllText(fileName, json);
+        }
 
         private Game CreateDescendants(int bestChromosomeNum, double crossoverProb)
         {
@@ -142,14 +148,6 @@ namespace GameOfLife
                     game.Save(@"C:\Temp\Data\Check");
                 }
             }
-        }
-
-        private double Fitness(Game game)
-        {
-            if (game.StartBoard.Population > 0)
-                return game.MaxPopulation / (double) game.StartBoard.Population;
-            else
-                return 0;
         }
 
         #endregion Private Methods

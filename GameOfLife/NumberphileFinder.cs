@@ -2,7 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace GameOfLife
@@ -95,6 +97,7 @@ namespace GameOfLife
                 game.Value.Save();
             }
 
+            SaveCoordinates(coordinates);
             //return the best game
             return (_chromosomes.Values.OrderBy(Fitness).Last(), coordinates);
         }
@@ -111,6 +114,14 @@ namespace GameOfLife
 
 
         #region Private Methods
+
+        private void SaveCoordinates(IList<Coords> coordinates)
+        {
+            var fileName = $"Coordinates_{nameof(Board)}__{DateTime.Now.Ticks}.txt";
+
+            var json = JsonSerializer.Serialize(coordinates);
+            File.WriteAllText(fileName, json);
+        }
 
         private Game CreateDescendants(int bestChromosomeNum, double crossoverProb)
         {
