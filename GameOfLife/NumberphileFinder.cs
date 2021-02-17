@@ -51,6 +51,10 @@ namespace GameOfLife
                 chromosome.Value.Save(@"C:\Temp\InitData2");
             }
 
+            double previousFitness = 1;
+            const int period = 100;
+            var movingAverage = new MovingAverage(period);
+            
             while (round < maxIteration)
             {
                 round++;
@@ -61,10 +65,12 @@ namespace GameOfLife
                 var bestFitness = Fitness(bestGames.First());
                 Console.WriteLine($"best fitness={bestFitness} for round {round}");
                 coordinates.Add(new Coords(round, bestFitness));
-                
-                if (bestGames.First().IsNumberphile)
-                    break;
+                movingAverage.Push(bestFitness / previousFitness);
 
+                if (round > period && bestGames.First().IsNumberphile && movingAverage.Average < 1.01 )
+                    break;
+                
+                previousFitness = bestFitness;
                 _chromosomes.Clear();
                 for (var i = 0; i < bestChromosomeNum; i++)
                 {
@@ -96,9 +102,9 @@ namespace GameOfLife
         public double Fitness(Game game)
         {
             if (game.StartBoard.Population > 0)
-                return game.Generation + (game.MaxPopulation / game.StartBoard.Population);
+                return game.MaxPopulation / (double) game.StartBoard.Population;
             else
-                return game.Generation;
+                return 0;
         }
 
         #endregion Public Methods

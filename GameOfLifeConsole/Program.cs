@@ -171,10 +171,13 @@ namespace GameOfLifeConsole
             // var game14 = FindNumberphile(10, 0.20, 1, 0.2, 1000);
             // //Score = 1194
 
-            var game13 = FindNumberphile(10, 1, 0.5, 0.2, 2000);
+            //var game13 = FindNumberphile(10, 1, 0.5, 0.2, 2000);
             //Fitness=12702, time=00:09:58.0898146
             //var game14 = FindNumberphile(20, 1, 0.5, 0.2, 1000);
             //Score = 6439
+
+
+            var game13 = FindNumberphile(20, 1, 0.5, 0.2, 2000);
 
             Console.ReadLine();
         }
