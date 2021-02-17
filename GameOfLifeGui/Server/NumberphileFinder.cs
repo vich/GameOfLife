@@ -48,7 +48,7 @@ namespace GameOfLife
             
             foreach (var chromosome in _chromosomes)
             {
-                chromosome.Value.Save(@"C:\Temp\InitData2");
+                chromosome.Value.Save();
             }
 			
             double previousFitness = 1;
@@ -145,7 +145,7 @@ namespace GameOfLife
                 else
                 {
                     Console.WriteLine($"Game run for to much generations, saved to files");
-                    game.Save(@"C:\Temp\Data\Check");
+                    game.Save("Check");
                 }
             }
         }

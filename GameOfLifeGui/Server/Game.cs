@@ -93,10 +93,9 @@ namespace GameOfLife
             return StartBoard.GetHashCode();
         }
 
-        public string Save(string path = @"C:\Temp\Data")
+        public string Save(string prefix = "Board")
         {
-            var fileName = Path.Combine(path,
-                $"{nameof(Board)}__{DateTime.Now.Ticks}.txt");
+            var fileName = $"{prefix}__{DateTime.Now.Ticks}.txt";
 
             var json = JsonConvert.SerializeObject(this);
             File.WriteAllText(fileName, json);

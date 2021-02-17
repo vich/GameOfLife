@@ -95,10 +95,9 @@ namespace GameOfLife
             return HashCode.Combine(Board, StartBoard, Generation);
         }
 
-        public string Save(string path = @"C:\Temp\Data")
+        public string Save(string prefix = "Board")
         {
-            var fileName = Path.Combine(path,
-                $"{nameof(Board)}__{DateTime.Now.Ticks}.txt");
+            var fileName = $"{prefix}__{DateTime.Now.Ticks}.txt";
              
             var options = new JsonSerializerOptions
             {
