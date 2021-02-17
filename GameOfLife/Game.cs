@@ -50,11 +50,11 @@ namespace GameOfLife
         }
 
         [JsonConstructor]
-        public Game(Board board, Board startBoard, int generation, IList<Board> steps, int maxPopulation)
+        public Game(Board board, Board startBoard, int generation, int maxPopulation)
         {
             Board = board;
             StartBoard = startBoard;
-            Steps = steps;
+            Steps = new List<Board>{ StartBoard};
 
             MaxPopulation = maxPopulation;
             Generation = generation;
