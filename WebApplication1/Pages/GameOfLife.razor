@@ -4,6 +4,8 @@
 @using System.Security.Cryptography;
 @using WebApplication1.Common
 @using WebApplication1.Enums
+@using global::GameOfLife
+@using System.IO
 
 @code {
     public int Rows { get; set; }
@@ -15,8 +17,8 @@
 
     public GameOfLife()
     {
-        Rows = 30;
-        Columns = 30;
+        Rows = 50;
+        Columns = 50;
         Grid = new Status[Rows, Columns];
     }
 
@@ -27,7 +29,7 @@
         {
             CalculateNextGeneration();
             StateHasChanged();
-            await Task.Delay(1000);
+            await Task.Delay(100);
         }
     }
 
@@ -111,6 +113,39 @@
         }
         Grid = nextGeneration;
     }
+
+    private async Task HandleSelection(InputFileChangeEventArgs files)
+    {
+        var selectedFiles = files.GetMultipleFiles();
+        var file = selectedFiles.FirstOrDefault();
+        if (file != null)
+        {
+            Stream stream = file.OpenReadStream();
+            var path = $"Temp\\{file.Name}";
+            FileStream fs = File.Create(path);
+            await stream.CopyToAsync(fs);
+            stream.Close();
+            fs.Close();
+
+            var game = Game.Load(path);
+            Grid = TransformToArray(game.Board);
+        }
+    }
+
+    private Status[,] TransformToArray(Board gameBoard)
+    {
+        var result = new Status[gameBoard.Rows, gameBoard.Columns];
+        for (int i = 0; i < gameBoard.Rows; i++)
+        {
+            for (int j = 0; j < gameBoard.Columns; j++)
+            {
+                result[i, j] = gameBoard[i, j] ? Status.Alive : Status.Dead;
+            }
+        }
+
+        return result;
+    }
+
 }
 
 @* <PageTitle Title="Conway's Game of Life" /> *@
@@ -144,6 +179,17 @@
             else
             {
                 <button class="btn btn-primary" @onclick="(async () => await Run())"><i class="fa fa-play"></i> Run</button>
+            }
+        </div>
+        <div class="col-2">
+            @if (RunSimulation)
+            {
+                <button class="btn btn-primary" disabled>Upload Board</button>
+            }
+            else
+            {
+                @*<BlazorInputFile.InputFile OnChange="HandleSelection"/>*@
+                <InputFile OnChange="HandleSelection" />
             }
         </div>
     </div>
