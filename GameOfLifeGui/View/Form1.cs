@@ -26,7 +26,7 @@ namespace GameOfLifeGui
                 upperPnl.Enabled = false;
                 await FindNumberphile(tbName.Text, btnColor.BackColor, (int) chromosomeNum.Value,
                     (double) numericUpDownMutation.Value, (double) numericUpDownCroosover.Value,
-                    (double) numericUpDownKeepBestRation.Value, (int) numericUpDownMaxIterations.Value);
+                    (double) numericUpDownKeepBestRation.Value, (double)numericUpDownNewGenerationration.Value, (int) numericUpDownMaxIterations.Value);
             }
             finally
             {
@@ -35,11 +35,11 @@ namespace GameOfLifeGui
         }
 
         private async Task FindNumberphile(string name, Color color, int chromosomeNum, double mutationProb,
-            double crossoverProb, double keepBestRation, int maxIteration)
+            double crossoverProb, double keepBestRation, double newGenerationRation, int maxIteration)
         {
             var sw = new Stopwatch();
             sw.Start();
-            var results = await Task.Run(() => _numberphileFinder.FindNumberphile(chromosomeNum, mutationProb, crossoverProb, keepBestRation, maxIteration));
+            var results = await Task.Run(() => _numberphileFinder.FindNumberphile(chromosomeNum, mutationProb, crossoverProb, keepBestRation, newGenerationRation, maxIteration));
             AddChart(results.Item2, name, color);
         }
 

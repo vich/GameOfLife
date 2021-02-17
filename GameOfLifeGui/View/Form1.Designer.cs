@@ -29,9 +29,9 @@ namespace GameOfLifeGui
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.button1 = new System.Windows.Forms.Button();
             this.chromosomeNum = new System.Windows.Forms.NumericUpDown();
@@ -52,6 +52,8 @@ namespace GameOfLifeGui
             this.upperPnl = new System.Windows.Forms.Panel();
             this.btnAddFromFile = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.label8 = new System.Windows.Forms.Label();
+            this.numericUpDownNewGenerationration = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chromosomeNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMutation)).BeginInit();
@@ -59,20 +61,21 @@ namespace GameOfLifeGui
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKeepBestRation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxIterations)).BeginInit();
             this.upperPnl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNewGenerationration)).BeginInit();
             this.SuspendLayout();
             // 
             // chart1
             // 
-            chartArea3.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            this.chart1.Legends.Add(legend3);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(12, 263);
             this.chart1.Name = "chart1";
-            series3.ChartArea = "ChartArea1";
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            this.chart1.Series.Add(series3);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(1805, 890);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
@@ -278,6 +281,8 @@ namespace GameOfLifeGui
             // 
             // upperPnl
             // 
+            this.upperPnl.Controls.Add(this.label8);
+            this.upperPnl.Controls.Add(this.numericUpDownNewGenerationration);
             this.upperPnl.Controls.Add(this.btnAddFromFile);
             this.upperPnl.Controls.Add(this.label7);
             this.upperPnl.Controls.Add(this.label6);
@@ -313,6 +318,38 @@ namespace GameOfLifeGui
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(7, 179);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(198, 25);
+            this.label8.TabIndex = 19;
+            this.label8.Text = "Ne Generation Ration";
+            // 
+            // numericUpDownNewGenerationration
+            // 
+            this.numericUpDownNewGenerationration.DecimalPlaces = 2;
+            this.numericUpDownNewGenerationration.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numericUpDownNewGenerationration.Location = new System.Drawing.Point(230, 177);
+            this.numericUpDownNewGenerationration.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownNewGenerationration.Name = "numericUpDownNewGenerationration";
+            this.numericUpDownNewGenerationration.Size = new System.Drawing.Size(111, 29);
+            this.numericUpDownNewGenerationration.TabIndex = 18;
+            this.numericUpDownNewGenerationration.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
@@ -331,6 +368,7 @@ namespace GameOfLifeGui
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxIterations)).EndInit();
             this.upperPnl.ResumeLayout(false);
             this.upperPnl.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNewGenerationration)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -357,6 +395,8 @@ namespace GameOfLifeGui
         private System.Windows.Forms.Panel upperPnl;
         private System.Windows.Forms.Button btnAddFromFile;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown numericUpDownNewGenerationration;
     }
 }
 

@@ -182,13 +182,13 @@ namespace GameOfLifeConsole
             Console.ReadLine();
         }
 
-        private static (Game, IList<Coords>) FindNumberphile(int chromosomeNum, double mutationProb, double crossoverProb, double keepBestRation = 0.2, int maxIteration = 1000)
+        private static (Game, IList<Coords>) FindNumberphile(int chromosomeNum, double mutationProb, double crossoverProb, double keepBestRation = 0.2,double newGenerationRation=0.1, int maxIteration = 1000)
         {
             var sw = new Stopwatch();
             sw.Start();
 
             var numberphileFinder = new NumberphileFinder();
-            var game = numberphileFinder.FindNumberphile(chromosomeNum, mutationProb, crossoverProb, keepBestRation, maxIteration);
+            var game = numberphileFinder.FindNumberphile(chromosomeNum, mutationProb, crossoverProb, keepBestRation, newGenerationRation, maxIteration);
             sw.Stop();
             var time = sw.Elapsed;
             //Console.WriteLine($"stopwatch={time}");

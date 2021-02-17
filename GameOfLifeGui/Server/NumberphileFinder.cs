@@ -25,7 +25,7 @@ namespace GameOfLife
 
         #region Public Methods
         
-        public (Game, IList<Coords>) FindNumberphile(int chromosomeNum, double mutationProb, double crossoverProb, double keepBestRation = 0.2, int maxIteration = 1000)
+        public (Game, IList<Coords>) FindNumberphile(int chromosomeNum, double mutationProb, double crossoverProb, double keepBestRation = 0.2, double newGenerationRation = 0.1, int maxIteration = 1000)
         {
             var sw = new Stopwatch();
             sw.Start();
@@ -33,6 +33,7 @@ namespace GameOfLife
 
             _chromosomes = new ConcurrentDictionary<int, Game>();
             var bestChromosomeNum = (int)(chromosomeNum * keepBestRation);
+            var newChromosomeNum = (int) (chromosomeNum * newGenerationRation);
             var round = 0;
 
             //init first generation 
@@ -77,8 +78,11 @@ namespace GameOfLife
                     _chromosomes.TryAdd(i, bestGames[i]);
                 }
 
+                //create new
+                Parallel.For(bestChromosomeNum, bestChromosomeNum + newChromosomeNum, index => _chromosomes.TryAdd(index, CreateGameAndRun(index)));
+
                 //crossover
-                Parallel.For(bestChromosomeNum, chromosomeNum, index => _chromosomes.TryAdd(index, CreateDescendants(bestChromosomeNum, crossoverProb)));
+                Parallel.For(bestChromosomeNum + newChromosomeNum, chromosomeNum, index => _chromosomes.TryAdd(index, CreateDescendants(bestChromosomeNum, crossoverProb)));
 
                 //mutation
                 Parallel.For(0, chromosomeNum, index =>
