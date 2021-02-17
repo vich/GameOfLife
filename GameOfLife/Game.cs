@@ -17,6 +17,8 @@ namespace GameOfLife
 
         #region Prorperties
 
+        public bool IsNumberphile { get; private set; }
+
         public Board Board { get; set; }
        
         public Board StartBoard { get; }
@@ -125,7 +127,7 @@ namespace GameOfLife
                 var repeatIndex = Steps.IndexOf(nextGenerationBoard);
                 if (repeatIndex != -1)
                 {
-                    //Console.WriteLine($"The same configuration found in generation {repeatIndex+1}, stop processing");
+                    IsNumberphile = true;
                     break;
                 } 
 
