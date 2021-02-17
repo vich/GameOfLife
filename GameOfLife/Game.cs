@@ -26,6 +26,7 @@ namespace GameOfLife
         
         public int Generation { get; private set; }
 
+        [JsonIgnore]
         public IList<Board> Steps { get; }
 
         public int MaxPopulation { get; private set; }
