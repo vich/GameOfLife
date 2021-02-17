@@ -87,7 +87,7 @@ namespace GameOfLife
 
             Console.WriteLine($"stopwatch={sw.Elapsed}");
             sw.Stop();
-            foreach (var game in _chromosomes.TakeLast(10))
+            foreach (var game in _chromosomes.TakeWhile(game => game.Value.IsNumberphile))
             {
                 game.Value.Save();
             }
