@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GameOfLife
 {
-    public class MethoshelachFinder
+    public class NumberphileFinder
     {
         #region Members
 
@@ -27,11 +27,11 @@ namespace GameOfLife
 
         #region Public Methods
         
-        public (Game, IList<Coords>) FindGoodMethoshelach(int chromosomeNum, double mutationProb, double crossoverProb, double keepBestRation = 0.2, int maxIteration = 1000)
+        public (Game, IList<Coords>) FindNumberphile(int chromosomeNum, double mutationProb, double crossoverProb, double keepBestRation = 0.2, int maxIteration = 1000)
         {
             var sw = new Stopwatch();
             sw.Start();
-            var coordinats = new List<Coords>();
+            var coordinates = new List<Coords>();
 
             _chromosomes = new ConcurrentDictionary<int, Game>();
             var bestChromosomeNum = (int)(chromosomeNum * keepBestRation);
@@ -58,13 +58,13 @@ namespace GameOfLife
                 round++;
 
                 //Rank Selection
-                var games = _chromosomes.Values.OrderBy(Fitness).Reverse();
+                var games = _chromosomes.Values.OrderBy(game=>game.IsNumberphile).ThenBy(Fitness).Reverse();
                 var bestGames = games.Take(bestChromosomeNum).ToList();
                 var bestFitness = Fitness(bestGames.First());
                 Console.WriteLine($"best fitness={bestFitness} for round {round}");
-                coordinats.Add(new Coords(round, bestFitness));
-
-                if (bestFitness > 1000)
+                coordinates.Add(new Coords(round, bestFitness));
+                
+                if (bestGames.First().IsNumberphile)
                     break;
 
                 _chromosomes.Clear();
@@ -92,7 +92,7 @@ namespace GameOfLife
             }
 
             //return the best game
-            return (_chromosomes.Values.OrderBy(Fitness).Last(), coordinats);
+            return (_chromosomes.Values.OrderBy(Fitness).Last(), coordinates);
         }
 
 

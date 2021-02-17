@@ -10,7 +10,7 @@ namespace GameOfLifeGui
 {
     public partial class Form1 : Form
     {
-        private MethoshelachFinder _methoshelachFinder;
+        private NumberphileFinder _numberphileFinder;
 
         public Form1()
         {
@@ -22,7 +22,7 @@ namespace GameOfLifeGui
             try
             {
                 upperPnl.Enabled = false;
-                await FindMethoshelach(tbName.Text, btnColor.BackColor, (int) chromosomeNum.Value,
+                await FindNumberphile(tbName.Text, btnColor.BackColor, (int) chromosomeNum.Value,
                     (double) numericUpDownMutation.Value, (double) numericUpDownCroosover.Value,
                     (double) numericUpDownKeepBestRation.Value, (int) numericUpDownMaxIterations.Value);
             }
@@ -32,12 +32,12 @@ namespace GameOfLifeGui
             }
         }
 
-        private async Task FindMethoshelach(string name, Color color, int chromosomeNum, double mutationProb,
+        private async Task FindNumberphile(string name, Color color, int chromosomeNum, double mutationProb,
             double crossoverProb, double keepBestRation, int maxIteration)
         {
             var sw = new Stopwatch();
             sw.Start();
-            var results = await Task.Run(() => _methoshelachFinder.FindGoodMethoshelach(chromosomeNum, mutationProb, crossoverProb, keepBestRation, maxIteration));
+            var results = await Task.Run(() => _numberphileFinder.FindNumberphile(chromosomeNum, mutationProb, crossoverProb, keepBestRation, maxIteration));
             AddChart(results.Item2, name, color, sw.Elapsed);
         }
 
@@ -55,7 +55,7 @@ namespace GameOfLifeGui
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            _methoshelachFinder = new MethoshelachFinder();
+            _numberphileFinder = new NumberphileFinder();
         }
 
         private void btnColor_Click(object sender, EventArgs e)

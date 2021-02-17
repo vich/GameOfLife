@@ -55,7 +55,7 @@
     <Compile Include="Server\Coords.cs" />
     <Compile Include="Server\Game.cs" />
     <Compile Include="Server\GameFactory.cs" />
-    <Compile Include="Server\MethoshelachFinder.cs" />
+    <Compile Include="Server\NumberphileFinder.cs" />
     <Compile Include="View\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
