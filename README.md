@@ -1,1 +1,1 @@
-Github page fir GameOfLife
+Github page for GameOfLife
