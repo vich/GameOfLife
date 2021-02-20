@@ -31,8 +31,8 @@ jobs:
       run: dotnet publish WebApplication1/WebApplication1.csproj -c Release -o release --nologo
     
     # changes the base-tag in index.html from '/' to 'WebApplication1' to match GitHub Pages repository subdirectory
-    - name: Change base-tag in index.html from / to GameOfLife/WebApplication1
-      run: sed -i 's/<base href="\/" \/>/<base href="\/GameOfLife\WebApplication1\/" \/>/g' release/wwwroot/index.html
+    - name: Change base-tag in index.html from / to GameOfLife
+      run: sed -i 's/<base href="\/" \/>/<base href="\/GameOfLife\/" \/>/g' release/wwwroot/index.html
     
     # copy index.html to 404.html to serve the same file when a file is not found
     - name: copy index.html to 404.html
