@@ -6,8 +6,6 @@ namespace GameOfLife
     {
         public static Game Create(int rows, int columns, int minGenerationsAlive, double maxCoverage = 1)
         {
-            //Console.WriteLine($"Start Create Game witch alive at minimum {minGenerationsAlive} generations");
-            
             var random = new Random();
 
             while (true)

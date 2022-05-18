@@ -17,7 +17,7 @@ namespace GameOfLife
 
         public static Board Create(int rows, int columns, double coverage)
         {
-            if(coverage < 0 || coverage > 1)
+            if(coverage is < 0 or > 1)
                 throw new ArgumentException($"{nameof(coverage)}={coverage}, not in range 0-1");
 
             var grid = GenerateRandomBoard(rows, columns, coverage);

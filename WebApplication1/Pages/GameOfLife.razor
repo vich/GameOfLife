@@ -1,5 +1,4 @@
 ﻿@page "/gameoflife"
-@inject HttpClient Http
 
 @using System.Security.Cryptography;
 @using WebApplication1.Common
@@ -8,20 +7,22 @@
 @using System.IO
 
 @code {
-    public int Rows { get; set; }
-    public int Columns { get; set; }
-    public bool RunSimulation { get; set; }
-    public Theme Theme { get; set; }
 
-    public Status[,] Grid { get; set; }
+    public int Rows { get; private set; }
+    public int Columns { get; private set; }
+    public bool RunSimulation { get; private set; }
+    public Theme Theme { get; private set; }
+    public Status[,] Grid { get; private set; }
+    
 
     public GameOfLife()
     {
-        Rows = 50;
-        Columns = 50;
+        Rows = 20;
+        Columns = 30;
         Grid = new Status[Rows, Columns];
     }
-
+    
+    
     public async Task Run()
     {
         RunSimulation = true;
@@ -29,7 +30,7 @@
         {
             CalculateNextGeneration();
             StateHasChanged();
-            await Task.Delay(100);
+            await Task.Delay(200);
         }
     }
 
@@ -120,9 +121,9 @@
         var file = selectedFiles.FirstOrDefault();
         if (file != null)
         {
-            Stream stream = file.OpenReadStream();
+            var stream = file.OpenReadStream();
             var path = $"Temp\\{file.Name}";
-            FileStream fs = File.Create(path);
+            var fs = File.Create(path);
             await stream.CopyToAsync(fs);
             stream.Close();
             fs.Close();
@@ -135,9 +136,9 @@
     private Status[,] TransformToArray(Board gameBoard)
     {
         var result = new Status[gameBoard.Rows, gameBoard.Columns];
-        for (int i = 0; i < gameBoard.Rows; i++)
+        for (var i = 0; i < gameBoard.Rows; i++)
         {
-            for (int j = 0; j < gameBoard.Columns; j++)
+            for (var j = 0; j < gameBoard.Columns; j++)
             {
                 result[i, j] = gameBoard[i, j] ? Status.Alive : Status.Dead;
             }

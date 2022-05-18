@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -122,13 +121,10 @@ namespace GameOfLife
         {
             for (var i = 0; i < maxIterations; i++)
             {
-                //Console.WriteLine($"Generation={Generation}, Population={Board.Population}");
                 var nextGenerationBoard = CalculateNextGeneration(Board);
-
                 var repeatIndex = Steps.IndexOf(nextGenerationBoard);
                 if (repeatIndex != -1)
                 {
-                    Debug.WriteLine($"Numberphile!!, The same configuration found in generation {repeatIndex + 1}, stop processing");
                     IsNumberphile = true;
                     break;
                 } 

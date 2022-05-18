@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -21,7 +20,6 @@ namespace GameOfLife
         private static Random Random { get; } = new();
 
 
-
         #endregion Members
 
 
@@ -29,24 +27,12 @@ namespace GameOfLife
         
         public (Game, IList<Coords>) FindNumberphile(int chromosomeNum, double mutationProb, double crossoverProb, double keepBestRation = 0.2, double newGenerationRation = 0.1, int maxIteration = 1000)
         {
-            var sw = new Stopwatch();
-            sw.Start();
             var coordinates = new List<Coords>();
-
             _chromosomes = new ConcurrentDictionary<int, Game>();
             var bestChromosomeNum = (int)(chromosomeNum * keepBestRation);
             var newChromosomeNum = (int) (chromosomeNum * newGenerationRation);
             var round = 0;
-
-            //init first generation 
-            // var files = Directory.GetFiles(@"C:\Temp\InitData2");
-            // for (var index = 0; index < files.Length && index < chromosomeNum; index++)
-            // {
-            //     var jsonPath = files[index];
-            //     var game = Game.Load(jsonPath);
-            //     _chromosomes.TryAdd(index, game);
-            // }
-
+            
             Parallel.For(0, chromosomeNum, index => _chromosomes.TryAdd(index ,CreateGameAndRun(index)));
             
             foreach (var chromosome in _chromosomes)
@@ -66,7 +52,6 @@ namespace GameOfLife
                 var games = _chromosomes.Values.OrderBy(game=>game.IsNumberphile).ThenBy(Fitness).Reverse();
                 var bestGames = games.Take(bestChromosomeNum).ToList();
                 var bestFitness = Fitness(bestGames.First());
-                Console.WriteLine($"best fitness={bestFitness} for round {round}");
                 coordinates.Add(new Coords(round, bestFitness));
                 movingAverage.Push(bestFitness / previousFitness);
 
@@ -93,9 +78,7 @@ namespace GameOfLife
                     _chromosomes[index].Play(MaxIterationToPlay);
                 });
             }
-
-            Console.WriteLine($"stopwatch={sw.Elapsed}");
-            sw.Stop();
+            
             foreach (var game in _chromosomes.TakeWhile(game => game.Value.IsNumberphile))
             {
                 game.Value.Save();
@@ -153,12 +136,10 @@ namespace GameOfLife
 
                 if(game.Generation < MaxIterationToPlay) //the board didn't stabilize
                 {
-                    Console.WriteLine($"Create game {index}");
                     return game;
                 }
                 else
                 {
-                    Console.WriteLine($"Game run for to much generations, saved to files");
                     game.Save("Check");
                 }
             }

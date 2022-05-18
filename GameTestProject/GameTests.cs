@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using GameOfLife;
 using NUnit.Framework;
 
@@ -7,15 +6,15 @@ namespace GameTestProject
     public class GameTests
     {
         private Game _game;
-        private const int rows = 50;
-        private const int columns = 50;
-        private const double coverage = 0.25;
-        private const int maxIterationToPlay = 10000;
+        private const int Rows = 50;
+        private const int Columns = 50;
+        private const double Coverage = 0.25;
+        private const int MaxIterationToPlay = 10000;
 
         [SetUp]
         public void Setup()
         {
-            var board = BoardFactory.Create(rows, columns, coverage);
+            var board = BoardFactory.Create(Rows, Columns, Coverage);
             _game = new Game(board);
         }
 
@@ -36,11 +35,11 @@ namespace GameTestProject
         public void RunningFullGridTest()
         {
             //Arrange
-            var board = BoardFactory.Create(rows, columns, 1);
+            var board = BoardFactory.Create(Rows, Columns, 1);
             _game = new Game(board);
 
             //Act
-            _game.Play(maxIterationToPlay);
+            _game.Play(MaxIterationToPlay);
 
             //Assert
             Assert.AreEqual(2, _game.Generation);
@@ -50,11 +49,11 @@ namespace GameTestProject
         public void RunningEmptyGridTest()
         {
             //Arrange
-            var board = BoardFactory.Create(rows, columns, 0);
+            var board = BoardFactory.Create(Rows, Columns, 0);
             _game = new Game(board);
 
             //Act
-            _game.Play(maxIterationToPlay);
+            _game.Play(MaxIterationToPlay);
 
             //Assert
             Assert.AreEqual(1, _game.Generation);
@@ -65,8 +64,8 @@ namespace GameTestProject
         public void CrossoverTest()
         {
             //Arrange
-            var boardA = BoardFactory.Create(rows, columns, 0.4);
-            var boardB = BoardFactory.Create(rows, columns, 0.4);
+            var boardA = BoardFactory.Create(Rows, Columns, 0.4);
+            var boardB = BoardFactory.Create(Rows, Columns, 0.4);
 
             //Act
             var crossover = BoardFactory.Crossover(boardA, boardB, 1);
@@ -80,7 +79,7 @@ namespace GameTestProject
         public void MutationTest()
         {
             //Arrange
-            var boardA = BoardFactory.Create(rows, columns, 0.4);
+            var boardA = BoardFactory.Create(Rows, Columns, 0.4);
             const double maxMutationRation = 0.1;
 
             //Act
